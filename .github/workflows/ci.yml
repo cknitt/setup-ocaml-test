@@ -9,28 +9,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout ReScript
         uses: actions/checkout@v4
-
-      - name: Cache apt packages for setup-ocaml
-        uses: awalsh128/cache-apt-pkgs-action@v1.4.2
         with:
-          packages: bubblewrap darcs g++-multilib gcc-multilib mercurial musl-tools rsync
-          version: v2
+          repository: rescript-lang/rescript-compiler
 
       - name: Setup OCaml
         uses: ocaml/setup-ocaml@v3.0.0
         with:
-          # ocaml-compiler: ocaml.5.2.0,ocaml-option-static
           ocaml-compiler: 5.2.0
           allow-prerelease-opam: true
           opam-pin: false
 
-      - name: Test compile
-        run: opam exec -- ocamlopt -ccopt -static a.ml
+      - run: opam install . --deps-only
 
-      - name: Check output
-        run: file a.out
+      - run: opam exec -- dune build --display quiet --profile static
 
-      - name: Run output
-        run: ./a.out
+      - run: file _build/default/jscomp/bsc/rescript_compiler_main.exe
+
+      - run: _build/default/jscomp/bsc/rescript_compiler_main.exe -v
