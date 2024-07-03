@@ -22,16 +22,13 @@ jobs:
         with:
           repository: rescript-lang/rescript-compiler
 
-      - run: sudo apt update
+      - run: sudo apt install -y --no-install-recommends opam musl-tools
 
-      - name: Setup OCaml
-        uses: ocaml/setup-ocaml@v3.0.0
-        with:
-          ocaml-compiler: 5.2.0
-          allow-prerelease-opam: true
-          opam-pin: false
+      - run: opam --version
 
-      - run: opam install . --deps-only
+      - run: opam init -y --compiler=5.2.0 --disable-sandboxing
+
+      - run: opam install .  -y --deps-only
 
       - run: opam exec -- dune build --display quiet --profile static
 
