@@ -26,9 +26,11 @@ jobs:
 
       - run: opam --version
 
-      - run: opam init -y --compiler=5.2.0 --disable-sandboxing
+      - run: opam init -y --bare --disable-sandboxing
 
-      - run: opam install .  -y --deps-only
+      - run: opam switch create 5.2.0 --packages ocaml-option-static
+
+      - run: opam install . -y --deps-only
 
       - run: opam exec -- dune build --display quiet --profile static
 
