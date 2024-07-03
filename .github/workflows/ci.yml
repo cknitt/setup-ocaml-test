@@ -6,13 +6,23 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [
+            ubuntu-latest, # x64
+            buildjet-2vcpu-ubuntu-2204-arm, # ARM
+          ]
+
+    runs-on: ${{matrix.os}}
 
     steps:
       - name: Checkout ReScript
         uses: actions/checkout@v4
         with:
           repository: rescript-lang/rescript-compiler
+
+      - run: sudo apt update
 
       - name: Setup OCaml
         uses: ocaml/setup-ocaml@v3.0.0
