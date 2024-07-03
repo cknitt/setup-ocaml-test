@@ -22,6 +22,8 @@ jobs:
         with:
           repository: rescript-lang/rescript-compiler
 
+      - run: update-alternatives --query gcc
+
       - run: sudo apt install -y --no-install-recommends opam musl-tools
 
       - run: opam --version
